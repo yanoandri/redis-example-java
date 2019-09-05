@@ -1,27 +1,30 @@
 package com.example.redisexample.model;
 
-import java.io.Serializable;
-import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 
-@RedisHash("Student")
-public class Student implements Serializable {
-   
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name= "student")
+public class Student extends JdkSerializationRedisSerializer implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public enum Gender {
-        MALE, FEMALE
+    public Student(){
+
     }
 
-    public Student(String id, String name, Gender gender, int grade){
-        this.id = id;
+    public Student(String name, String gender, int grade){
         this.name = name;
         this.gender = gender;
         this.grade = grade;
     }
- 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
-    private Gender gender;
+    private String gender;
     private int grade;
 
     public String getId() {
@@ -36,11 +39,11 @@ public class Student implements Serializable {
         this.grade = grade;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
